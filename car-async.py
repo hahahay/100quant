@@ -156,6 +156,25 @@ def gen_num12():
             nums.append(num)
     return nums
 
+def gen_num15():
+    #2208
+    # '01235689'
+    p1s = 'ABCDEFGHKLMNPQRSTUVWXYZ'
+    p2s = '5689'
+    p3s = 'ABCDEFGHJKLMNPQRSTUVWXYZ'
+    p4s = '8'
+    p5s = '0'
+    nums = []
+    for p1 in p1s:
+        for p2 in p2s:
+            for p3 in p3s:
+                for p4 in p4s:
+                    for p5 in p5s:
+                        num = p1+p2+p3+p4+p5
+                        nums.append(num)
+    return nums
+
+
 async def req_one(num):
     p1, p2, p3, p4, p5 = num[0], num[1], num[2], num[3], num[4]
     base_url = 'http://117.36.53.122:9085/zzxh/business/BusinessAction.do?actiontype=xhgzvalidate&timeStamp=1483971549238&clsbdh=1HGCD5656VA008978&hpzl=02&hphm1=A&hphm2={0}&hphm3={1}&hphm4={2}&hphm5={3}&hphm6={4}&cxyzm=true'.format(
@@ -219,9 +238,9 @@ def sub_list(nums, max_len):
 
 def main():
     startt = time.time()
-    nums = gen_num7()
+    nums = gen_num15()
     d2list = sub_list(nums, 20)
-    result = ['0']
+    result = []
     for d1list in d2list:
         result.extend(req_list(d1list))
 
@@ -229,7 +248,7 @@ def main():
     print(len(result))
     with open('nums-async.txt', 'w') as f:
         for i in result:
-            f.writelines(i)
+            f.writelines(i+' ')
     print(time.time()-startt)
     print("over")
 if __name__ == '__main__':
