@@ -59,13 +59,13 @@ def play_video_1(proxy, av):
 
     drive = webdriver.Chrome(options=chrome_options)
     # drive = webdriver.Chrome()
-    av_url = "https://www.bilibili.com/video/{0}/".format(av)
+    av_url = "https://www.bilibili.com/video/{0}/?spm_id_from=333.788.videocard.4".format(av)
     print(av_url)
 
     # drive.get("https://www.bilibili.com/video/av41724649/")
     try:
         drive.get(av_url)
-        video = WebDriverWait(drive, 20, 0.5).until(
+        video = WebDriverWait(drive, 10, 0.5).until(
             EC.presence_of_element_located((By.XPATH, "//*[@id='bilibiliPlayer']/div[1]/div[1]/div[8]/video")))  # 找到视频
         url = drive.execute_script("return arguments[0].currentSrc;", video)  # 打印视频地址
         print(url)
@@ -84,7 +84,7 @@ def play_video_1(proxy, av):
 
 def get_proxy(n):
     s = requests.session()
-    r = s.get('http://api3.xiguadaili.com/ip/?tid=559676048748861&num={0}&delay=3&protocol=https'.format(n))
+    r = s.get('http://api3.xiguadaili.com/ip/?tid=559059590565795&num={0}&delay=1&category=2&protocol=https'.format(n))
     r1 = r.text
     proxy_list = r1.split("\r\n")
     return proxy_list
@@ -94,7 +94,7 @@ def get_proxy(n):
 
 def play(av, n):
     proxy_list = get_proxy(n)
-    executor = ThreadPoolExecutor(max_workers=2)
+    executor = ThreadPoolExecutor(max_workers=n)
     play_video_av = partial(play_video_1, av=av)
 
     for data in executor.map(play_video_av, proxy_list):
@@ -102,6 +102,11 @@ def play(av, n):
 
 
 av = "av41723598"
-n = 10
-play(av, n)
+n = 4
+loop = 10
+
+for i in range(loop):
+    play(av, n)
+
 print("end of all")
+
